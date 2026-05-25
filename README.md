@@ -7,7 +7,7 @@ This repository includes 16 models (10 main baselines + 5 Alibaba industrial bas
 ## Installation
 
 ```bash
-git clone https://github.com/cpsandwich/recengram.git
+git clone https://github.com/your-username/recengram.git
 cd recengram
 pip install -e .
 ```
@@ -18,9 +18,11 @@ Requirements: `torch >= 2.0`, `numpy`, `tqdm`.
 
 Place datasets under the `data/` directory:
 
-- **Taobao** (`data/taobao/`): UserBehavior.csv
-- **Amazon Beauty** (`data/amazon_beauty/`): Beauty.json.gz (or Beauty_5.json.gz)
-- **MovieLens-1M** (`data/movielens1m/`): ratings.dat, movies.dat, users.dat
+| Dataset | Directory | Required Files |
+|---------|-----------|---------------|
+| Taobao | `data/taobao/` | `UserBehavior.csv` (uid, iid, cid, brand_id, timestamp) |
+| Amazon Beauty | `data/amazon_beauty/` | `reviews_Beauty_5.json.gz` ([download](http://jmcauley.ucsd.edu/data/amazon/)) |
+| MovieLens-1M | `data/movielens1m/` | `ratings.dat` ([download](https://grouplens.org/datasets/movielens/1m/))
 
 ## Usage
 
@@ -141,3 +143,13 @@ recengram_v2/
 └── README.md
 ```
 
+## Citation
+
+```bibtex
+@inproceedings{recengram,
+  title     = {RecEngram: Dynamic Memory for Sequential Recommendation},
+  author    = {},
+  booktitle = {Proceedings of ACL},
+  year      = {2025}
+}
+```
