@@ -141,13 +141,3 @@ recengram_v2/
 └── README.md
 ```
 
-## Citation
-
-```bibtex
-@inproceedings{recengram,
-  title     = {RecEngram: Dynamic Memory for Sequential Recommendation},
-  author    = {},
-  booktitle = {Proceedings of ACL},
-  year      = {2025}
-}
-```
