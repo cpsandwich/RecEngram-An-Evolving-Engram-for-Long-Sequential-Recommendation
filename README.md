@@ -7,7 +7,7 @@ This repository includes 16 models (10 main baselines + 5 Alibaba industrial bas
 ## Installation
 
 ```bash
-git clone https://github.com/your-username/recengram.git
+git clone [https://github.com/cpsandwich/RecEngram-An-Evolving-Engram-for-Long-Sequential-Recommendation.git]
 cd recengram
 pip install -e .
 ```
@@ -141,15 +141,4 @@ recengram_v2/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
-```
-
-## Citation
-
-```bibtex
-@inproceedings{recengram,
-  title     = {RecEngram: Dynamic Memory for Sequential Recommendation},
-  author    = {},
-  booktitle = {Proceedings of ACL},
-  year      = {2025}
-}
 ```
