@@ -7,7 +7,7 @@ This repository includes 16 models (10 main baselines + 5 Alibaba industrial bas
 ## Installation
 
 ```bash
-git clone https://github.com/your-username/recengram.git
+git clone https://github.com/cpsandwich/recengram.git
 cd recengram
 pip install -e .
 ```
