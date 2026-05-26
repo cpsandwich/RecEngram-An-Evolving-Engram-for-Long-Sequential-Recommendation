@@ -74,19 +74,22 @@ def evaluate_recengram(
     model.eval()
     all_recall = []
     all_ndcg = []
+    all_hr = []
     all_mrr = []
 
     for batch in loader:
         batch = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
         all_scores, aux = model(batch)
-        metrics = compute_all_metrics(all_scores, k)
-        all_recall.append(metrics["recall"])
-        all_ndcg.append(metrics["ndcg"])
-        all_mrr.append(metrics["mrr"])
+        metrics = compute_all_metrics(all_scores, k=k)
+        all_recall.append(metrics[f"Recall@{k}"])
+        all_ndcg.append(metrics[f"NDCG@{k}"])
+        all_hr.append(metrics[f"HR@{k}"])
+        all_mrr.append(metrics["MRR"])
 
     return {
         "recall": torch.tensor(all_recall).mean().item(),
         "ndcg": torch.tensor(all_ndcg).mean().item(),
+        "hr": torch.tensor(all_hr).mean().item(),
         "mrr": torch.tensor(all_mrr).mean().item(),
     }
 
@@ -112,7 +115,7 @@ def run_training_recengram(
     best_val_ndcg = -1.0
     best_state = None
     patience_counter = 0
-    history = {"train_loss": [], "val_recall": [], "val_ndcg": [], "val_mrr": []}
+    history = {"train_loss": [], "val_recall": [], "val_ndcg": [], "val_hr": [], "val_mrr": []}
 
     epoch_iter = range(1, config.num_epochs + 1)
     if verbose:
@@ -128,6 +131,7 @@ def run_training_recengram(
             val_metrics = evaluate_recengram(model, val_loader, device, config.top_k)
             history["val_recall"].append(val_metrics["recall"])
             history["val_ndcg"].append(val_metrics["ndcg"])
+            history["val_hr"].append(val_metrics["hr"])
             history["val_mrr"].append(val_metrics["mrr"])
 
             if val_metrics["ndcg"] > best_val_ndcg:

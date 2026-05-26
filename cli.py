@@ -60,7 +60,7 @@ def parse_args():
     # Appendix
     pa = subparsers.add_parser("appendix", help="Appendix experiments")
     pa.add_argument("--section", default="all",
-                    choices=["all", "alibaba", "dynamicsasrec", "std"])
+                    choices=["all", "alibaba", "dynamicsasrec", "std", "significance"])
     pa.add_argument("--dataset", default=None)
     pa.add_argument("--output", default="results/")
 
@@ -112,7 +112,10 @@ def main():
         run_robustness_summary(config, args.dataset, args.output)
 
     elif args.command == "appendix":
-        from .experiments.appendix import run_appendix_alibaba, run_appendix_dynamicsasrec
+        from .experiments.appendix import (
+            run_appendix_alibaba, run_appendix_dynamicsasrec,
+            run_significance_test,
+        )
         section = args.section
         if section in ("all", "alibaba"):
             datasets = [args.dataset] if args.dataset else None
@@ -120,6 +123,8 @@ def main():
         if section in ("all", "dynamicsasrec"):
             datasets = [args.dataset] if args.dataset else None
             run_appendix_dynamicsasrec(config, datasets=datasets, output_dir=args.output)
+        if section in ("all", "significance"):
+            run_significance_test(config, dataset=args.dataset or "taobao", output_dir=args.output)
 
     elif args.command == "all":
         print("Running all experiments (Tables 2-9 + Appendix)...")

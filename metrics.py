@@ -1,7 +1,7 @@
-"""Standard top-K ranking metrics: Recall@K, NDCG@K, MRR."""
+"""Standard top-K ranking metrics: Recall@K, NDCG@K, HR@K, MRR."""
 
 import numpy as np
-from typing import Dict
+from typing import Dict, List
 
 
 def _compute_ranks(scores: np.ndarray) -> np.ndarray:
@@ -37,16 +37,54 @@ def ndcg_at_k(ranks: np.ndarray, k: int) -> float:
     return float(dcg / idcg)
 
 
-def mrr_at_k(ranks: np.ndarray, k: int) -> float:
-    """Mean Reciprocal Rank @K."""
+def hit_rate_at_k(ranks: np.ndarray, k: int) -> float:
+    """Hit Rate @K: proportion of users with at least one hit in top-K."""
     if len(ranks) == 0:
         return 0.0
-    reciprocal = np.where(ranks <= k, 1.0 / ranks, 0.0)
+    return float((ranks <= k).mean())
+
+
+def mrr_at_k(ranks: np.ndarray, k: int = None) -> float:
+    """Mean Reciprocal Rank @K. If k is None, MRR over all ranks."""
+    if len(ranks) == 0:
+        return 0.0
+    if k is not None:
+        reciprocal = np.where(ranks <= k, 1.0 / ranks, 0.0)
+    else:
+        reciprocal = 1.0 / ranks
     return float(reciprocal.mean())
 
 
-def compute_all_metrics(scores: np.ndarray, k: int = 10) -> Dict[str, float]:
-    """Compute Recall@K, NDCG@K, MRR for a single batch or full set.
+def compute_all_metrics(
+    scores: np.ndarray, ks=None, k: int = None
+) -> Dict[str, float]:
+    """Compute Recall@K, NDCG@K, HR@K, MRR for given K values.
+
+    Args:
+        scores: (B, N_items) prediction logits, col 0 = positive
+        ks: list of cutoff values (default [5, 10, 20])
+        k: single cutoff (backward-compatible, deprecated)
+
+    Returns:
+        dict with metric_name -> value
+    """
+    if ks is None:
+        if k is not None:
+            ks = [k]
+        else:
+            ks = [5, 10, 20]
+    ranks = _compute_ranks(scores)
+    metrics = {}
+    for cutoff in ks:
+        metrics[f"Recall@{cutoff}"] = recall_at_k(ranks, cutoff)
+        metrics[f"NDCG@{cutoff}"] = ndcg_at_k(ranks, cutoff)
+        metrics[f"HR@{cutoff}"] = hit_rate_at_k(ranks, cutoff)
+    metrics["MRR"] = mrr_at_k(ranks, None)
+    return metrics
+
+
+def compute_metrics_at_k(scores: np.ndarray, k: int = 10) -> Dict[str, float]:
+    """Compute metrics at a single K (backward-compatible).
 
     Args:
         scores: (B, N_items) prediction logits, col 0 = positive
@@ -56,5 +94,6 @@ def compute_all_metrics(scores: np.ndarray, k: int = 10) -> Dict[str, float]:
     return {
         f"Recall@{k}": recall_at_k(ranks, k),
         f"NDCG@{k}": ndcg_at_k(ranks, k),
+        f"HR@{k}": hit_rate_at_k(ranks, k),
         f"MRR@{k}": mrr_at_k(ranks, k),
     }

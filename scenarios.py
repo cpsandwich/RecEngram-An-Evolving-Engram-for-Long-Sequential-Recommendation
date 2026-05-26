@@ -103,10 +103,10 @@ def run_sequence_length_experiment(
                     scores, _ = model(batch)
                 else:
                     scores = model(batch)
-                m = compute_all_metrics(scores, config.top_k)
-                recalls.append(m["recall"])
-                ndcgs.append(m["ndcg"])
-                mrrs.append(m["mrr"])
+                m = compute_all_metrics(scores, k=config.top_k)
+                recalls.append(m[f"Recall@{config.top_k}"])
+                ndcgs.append(m[f"NDCG@{config.top_k}"])
+                mrrs.append(m["MRR"])
             results[model_name][group_name] = {
                 "recall": torch.tensor(recalls).mean().item(),
                 "ndcg": torch.tensor(ndcgs).mean().item(),
@@ -200,10 +200,10 @@ def run_concept_drift_experiment(
                     scores, _ = model(batch)
                 else:
                     scores = model(batch)
-                m = compute_all_metrics(scores, config.top_k)
-                recalls.append(m["recall"])
-                ndcgs.append(m["ndcg"])
-                mrrs.append(m["mrr"])
+                m = compute_all_metrics(scores, k=config.top_k)
+                recalls.append(m[f"Recall@{config.top_k}"])
+                ndcgs.append(m[f"NDCG@{config.top_k}"])
+                mrrs.append(m["MRR"])
             results[model_name][group_name] = {
                 "recall": torch.tensor(recalls).mean().item(),
                 "ndcg": torch.tensor(ndcgs).mean().item(),
@@ -297,10 +297,10 @@ def run_density_experiment(
                     scores, _ = model(batch)
                 else:
                     scores = model(batch)
-                m = compute_all_metrics(scores, config.top_k)
-                recalls.append(m["recall"])
-                ndcgs.append(m["ndcg"])
-                mrrs.append(m["mrr"])
+                m = compute_all_metrics(scores, k=config.top_k)
+                recalls.append(m[f"Recall@{config.top_k}"])
+                ndcgs.append(m[f"NDCG@{config.top_k}"])
+                mrrs.append(m["MRR"])
             results[model_name][group_name] = {
                 "recall": torch.tensor(recalls).mean().item(),
                 "ndcg": torch.tensor(ndcgs).mean().item(),
@@ -388,10 +388,10 @@ def run_cross_category_experiment(
                     scores, _ = model(batch)
                 else:
                     scores = model(batch)
-                m = compute_all_metrics(scores, config.top_k)
-                recalls.append(m["recall"])
-                ndcgs.append(m["ndcg"])
-                mrrs.append(m["mrr"])
+                m = compute_all_metrics(scores, k=config.top_k)
+                recalls.append(m[f"Recall@{config.top_k}"])
+                ndcgs.append(m[f"NDCG@{config.top_k}"])
+                mrrs.append(m["MRR"])
             results[model_name][group_name] = {
                 "recall": torch.tensor(recalls).mean().item(),
                 "ndcg": torch.tensor(ndcgs).mean().item(),

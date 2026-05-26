@@ -101,6 +101,7 @@ def run_overall_experiment(
             model_results[f"seed_{seed}"] = {
                 "recall": result["test_metrics"].get("recall", 0),
                 "ndcg": result["test_metrics"].get("ndcg", 0),
+                "hr": result["test_metrics"].get("hr", 0),
                 "mrr": result["test_metrics"].get("mrr", 0),
             }
 
@@ -109,6 +110,7 @@ def run_overall_experiment(
 
         recalls = [v["recall"] for v in model_results.values()]
         ndcgs = [v["ndcg"] for v in model_results.values()]
+        hrs = [v["hr"] for v in model_results.values()]
         mrrs = [v["mrr"] for v in model_results.values()]
 
         results[model_name] = {
@@ -116,6 +118,8 @@ def run_overall_experiment(
             "recall_std": (sum((r - sum(recalls)/len(recalls))**2 for r in recalls) / len(recalls)) ** 0.5,
             "ndcg_mean": sum(ndcgs) / len(ndcgs),
             "ndcg_std": (sum((r - sum(ndcgs)/len(ndcgs))**2 for r in ndcgs) / len(ndcgs)) ** 0.5,
+            "hr_mean": sum(hrs) / len(hrs),
+            "hr_std": (sum((r - sum(hrs)/len(hrs))**2 for r in hrs) / len(hrs)) ** 0.5,
             "mrr_mean": sum(mrrs) / len(mrrs),
             "mrr_std": (sum((r - sum(mrrs)/len(mrrs))**2 for r in mrrs) / len(mrrs)) ** 0.5,
         }

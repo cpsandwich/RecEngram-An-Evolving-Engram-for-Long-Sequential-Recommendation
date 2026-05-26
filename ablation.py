@@ -148,6 +148,7 @@ def run_ablation(
         results[variant_name] = {
             "recall": result["test_metrics"].get("recall", 0),
             "ndcg": result["test_metrics"].get("ndcg", 0),
+            "hr": result["test_metrics"].get("hr", 0),
             "mrr": result["test_metrics"].get("mrr", 0),
         }
         print(f"  Recall@10: {results[variant_name]['recall']:.4f}")
